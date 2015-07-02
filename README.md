@@ -1,26 +1,7 @@
-# Seed Template for Jquery
+# Mini Blog for your thoughts
 
-## What's in the Box?
+## How do I use it?
 
-1. Jquery
-2. Boostrap
-3. Underscore.js
-
-
-## Getting Started
-
-1. ```$ git clone https://github.com/ajbraus/seed-jquery.git seedJquery```
-2. ```$ cd seedJquery```
-3. ```$ open index.html```
-
-
-## File structure
-
-```
-|seed-jquery
- - app.js
- - index.html
- - README.md
- - style.css
-
-```
+1. Write little posts
+2. Read other posts
+3. That's it!
