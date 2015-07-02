@@ -7,3 +7,7 @@
   border-radius: 0px;
 }
 
+textarea {
+	resize: none;
+}
+
