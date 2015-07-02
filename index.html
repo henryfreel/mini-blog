@@ -17,22 +17,37 @@
 
   </head>
   <body>
+
+    <!-- Nav Bar -->
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
+
         <div class="navbar-header">
           <a class="navbar-brand" href="#">
             Project 0 - Micro Blog
           </a>
         </div>
+
       </div>
     </nav>
 
+    <!-- Blog Post Forms -->
     <div class='container'>
-      <h1>Start a new project with this</h1>
-      <h4>Here's what's in the box</h4>
-      <ul>
-        <li>list item</li>
-      </ul>
+      <div class="col-lg-8 col-md-offset-2">
+        <form>
+
+          <div class="form-group">
+            <input class="form-control" id="name" placeholder="What's your? name?">
+          </div>
+
+          <div class="form-group">
+            <textarea class="form-control" rows="5" id="comment" placeholder="Write a little something that you're thinking about..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+
+        </form>
+      </div>
     </div>
 
     <!-- SCRIPTS -->
