@@ -39,17 +39,31 @@ $(function() {
 		Post.all.push(this);
 	}
 
+	//Render on page
+	Post.prototype.render = function() {
+		var $post = $(postTemplate(this));
+		$postsContainer.append($post);
+
+		//add index
+		var index = Post.all.indexOf(this);
+		$post.attr("data-index", index);
+	}
+
 	// Test Posts
 	console.log("-> Array has *" + Post.all.length + "* spots");
-	var post1 = new Post("henry", "here is some sample text for a post")
+	var post1 = new Post("henry", "Do you like green eggs and ham? I do not like them, Sam-I-am. I do not like green eggs and ham! Would you like them here or there? I would not like them here or there. I would not like them anywhere. I do so like green eggs and ham! Thank you! Thank you, Sam-I-am")
 	post1.save();
-	console.log(post1)
 
-	var post2 = new Post("Samuel", "here is some sample text for a anthoer post")
+	var post2 = new Post("Samuel", "here is some sample text for another post")
 	post2.save();
-	console.log(post2)
 
-	console.log("now array has *" + Post.all.length + "* items");
+	var post3 = new Post("Izzy", "here is some sample text for yet another post")
+	post3.save();
+
+	// Render Array on page
+	_.each(Post.all, function(post, index) {
+		post.render();
+	})
 
 	// On CLICK not SUBMIT
 	$publishPost.on("click", function(event) {
@@ -61,11 +75,11 @@ $(function() {
 		var postData = new Post(postName, postBody);
 
 		// save to Post.all array
-		console.log(postData);
 		postData.save();
-		console.log(Post.all.length);
 
-		$postsContainer.append($(postTemplate(postData)));
+		//Render on page
+		postData.render();
+
 
 	});
 
