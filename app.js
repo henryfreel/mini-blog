@@ -12,6 +12,9 @@ $(function() {
 
 	var $postsContainer = $("#posts-container")
 
+	// Count Variables
+	var $postCount = $(".post-count p")
+
 	// Initial Set up
 	$postName.prop('required',true);
 	$postBody.prop('required',true);
@@ -31,18 +34,18 @@ $(function() {
 		this.body = body;
 	}
 
-	// Posts array
+	// Posts array - ask about why this has to be outside of the constructor
 	Post.all = [];
 
 	// Save to array
 	Post.prototype.save = function() {
-		Post.all.push(this);
+		Post.all.unshift(this);
 	}
 
 	//Render on page
 	Post.prototype.render = function() {
 		var $post = $(postTemplate(this));
-		$postsContainer.append($post);
+		$postsContainer.prepend($post);
 
 		//add index
 		var index = Post.all.indexOf(this);
@@ -51,21 +54,25 @@ $(function() {
 
 	// Test Posts
 	console.log("-> Array has *" + Post.all.length + "* spots");
-	var post1 = new Post("henry", "Do you like green eggs and ham? I do not like them, Sam-I-am. I do not like green eggs and ham! Would you like them here or there? I would not like them here or there. I would not like them anywhere. I do so like green eggs and ham! Thank you! Thank you, Sam-I-am")
+	var post1 = new Post("henry", "1: Do you like green eggs and ham? I do not like them, Sam-I-am. I do not like green eggs and ham! Would you like them here or there? I would not like them here or there. I would not like them anywhere. I do so like green eggs and ham! Thank you! Thank you, Sam-I-am")
 	post1.save();
 
-	var post2 = new Post("Samuel", "here is some sample text for another post")
+	var post2 = new Post("Samuel", "2: here is some sample text for another post")
 	post2.save();
 
-	var post3 = new Post("Izzy", "here is some sample text for yet another post")
+	var post3 = new Post("Izzy", "3: here is some sample text for yet another post")
 	post3.save();
 
 	// Render Array on page
+	Post.all.reverse();
 	_.each(Post.all, function(post, index) {
 		post.render();
 	})
 
-	// On CLICK not SUBMIT
+	// Update post count
+	$postCount.html(Post.all.length + " posts")
+
+	// On CLICK not SUBMIT - ask why this isn't working as a submit listener
 	$publishPost.on("click", function(event) {
 		event.preventDefault();
 
@@ -80,6 +87,8 @@ $(function() {
 		//Render on page
 		postData.render();
 
+		// Update post count
+		$postCount.html(Post.all.length + " posts")
 
 	});
 
