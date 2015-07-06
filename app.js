@@ -17,43 +17,31 @@ $(function() {
 	var $postsContainer = $("#posts-container");
 
 	// Comment Variables
-	var $commentInput = $("#comment-input");
-	var $commentSubmit = $("#comment-submit");
-	var $commentForm = $("#comment-form")
-
-	console.log($("#comment-submit"));
+	var $commentInput = $(".comment-input");
+	var $commentSubmit = $(".comment-submit");
+	var $commentForm = $(".comment-form")
+	var $commentsContainer = $(".comments-container")
 
 	// Count Variables
 	var $postCount = $(".post-count p")
 
-	// Initial Set up
-	$postName.prop('required',true);
-	$postBody.prop('required',true);
-
 	// New Post Button
 	var $newPostButton = $("#new-post-button");
-
-	$newPostButton.on("click", function(event) {
-		event.preventDefault();
-
-	})
 
 	// Contrsuctor
 	var Post = function(name, body) {
 		this.name = name;
 		this.body = body;
+		this.comments = [];
 	}
 
 	// Posts array - ask about why this has to be outside of the constructor and why not just use a reqular array
 	Post.all = [];
 
-	//Add comments Array
-	Post.comments = [];
-
 	// Save to array
-	Post.prototype.save = function() {
+	Post.prototype.savePost = function() {
 		Post.all.unshift(this);
-	}
+	};
 
 	//Render on page
 	Post.prototype.render = function() {
@@ -63,17 +51,17 @@ $(function() {
 		//add index
 		var index = Post.all.indexOf(this);
 		$post.attr("data-index", index);
-	}
+	};
 
 	// Test Posts
 	var post1 = new Post("henry", "1: Do you like green eggs and ham? I do not like them, Sam-I-am. I do not like green eggs and ham! Would you like them here or there? I would not like them here or there. I would not like them anywhere. I do so like green eggs and ham! Thank you! Thank you, Sam-I-am")
-	post1.save();
+	post1.savePost();
 
 	var post2 = new Post("Samuel", "2: here is some sample text for another post")
-	post2.save();
+	post2.savePost();
 
 	var post3 = new Post("Izzy", "3: here is some sample text for yet another post")
-	post3.save();
+	post3.savePost();
 
 	// Render Array on page
 	Post.all.reverse();
@@ -83,15 +71,6 @@ $(function() {
 
 	// Update post count
 	$postCount.html(Post.all.length + " posts")
-
-	// On click of new post button
-	$newPostButton.on("click", function(event) {
-		console.log("you clicked new post!")
-
-		console.log($postName);
-		$postName.prop('required',true);
-		$postBody.prop('required',true);
-	});
 
 	// on modal SHOW
 	$newPostModal.on('shown.bs.modal', function () {
@@ -112,25 +91,54 @@ $(function() {
 		var postBody = $postBody.val();
 		var postData = new Post(postName, postBody);
 
-		// save to Post.all array
-		postData.save();
+		if (postName != "" && postBody != "") {
+			$newPostModal.modal('hide')
 
-		//Render on page
-		postData.render();
+			// save to Post.all array
+			postData.savePost();
 
-		// Update post count
-		$postCount.html(Post.all.length + " posts")
+			//Render on page
+			postData.render();
+
+			// Update post count
+			$postCount.html(Post.all.length + " posts")
+		} else {
+			$("#post-name-group").addClass("has-error");
+			$("#post-body-group").addClass("has-error");
+
+			$postBody.placeholder = "here is some shit";
+
+			console.log("you gotta type something")
+		}
 
 	});
 
 	// Comment Submit
-	$commentSubmit.on("click", function(event) {
+	$postsContainer.on("submit", $commentSubmit, function(event) {
 		event.preventDefault();
 
-		console.log("form submitted");
+		// var comment = $commentInput.val();
+
+		var $commentsConatiner = $(this).children(".comments-container");
+		console.log($commentsConatiner);
+
+		var $comment = $(this).children(".comment-input");
+
+		console.log($comment);
+
 	});
 
+
 });
+
+
+
+
+
+
+
+
+
 
 
 
