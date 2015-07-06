@@ -44,3 +44,10 @@ textarea {
 	/*margin-top: 20px;*/
 	top: 8px;
 }
+
+#comment-input {
+	margin: 10px;
+	width: 574px;
+	margin-right: 5px;
+
+}

@@ -1,19 +1,27 @@
 $(function() {
 
 	// Tooltips
-	  $('[data-toggle="tooltip"]').tooltip()
+	$('[data-toggle="tooltip"]').tooltip()
 
 	// Template
 	var postTemplate = _.template($("#post-template").html())
 
 	// Post Variables
 	var $newPostForm = $("#new-post-form");
+	var $newPostModal = $("#add-post-modal");
 
 	var $postName = $("#post-name");
 	var $postBody = $("#post-body");
 	var $publishPost = $("#publish-post");
 
-	var $postsContainer = $("#posts-container")
+	var $postsContainer = $("#posts-container");
+
+	// Comment Variables
+	var $commentInput = $("#comment-input");
+	var $commentSubmit = $("#comment-submit");
+	var $commentForm = $("#comment-form")
+
+	console.log($("#comment-submit"));
 
 	// Count Variables
 	var $postCount = $(".post-count p")
@@ -28,7 +36,6 @@ $(function() {
 	$newPostButton.on("click", function(event) {
 		event.preventDefault();
 
-		console.log("clicked new post");
 	})
 
 	// Contrsuctor
@@ -37,8 +44,11 @@ $(function() {
 		this.body = body;
 	}
 
-	// Posts array - ask about why this has to be outside of the constructor
+	// Posts array - ask about why this has to be outside of the constructor and why not just use a reqular array
 	Post.all = [];
+
+	//Add comments Array
+	Post.comments = [];
 
 	// Save to array
 	Post.prototype.save = function() {
@@ -56,7 +66,6 @@ $(function() {
 	}
 
 	// Test Posts
-	console.log("-> Array has *" + Post.all.length + "* spots");
 	var post1 = new Post("henry", "1: Do you like green eggs and ham? I do not like them, Sam-I-am. I do not like green eggs and ham! Would you like them here or there? I would not like them here or there. I would not like them anywhere. I do so like green eggs and ham! Thank you! Thank you, Sam-I-am")
 	post1.save();
 
@@ -74,6 +83,25 @@ $(function() {
 
 	// Update post count
 	$postCount.html(Post.all.length + " posts")
+
+	// On click of new post button
+	$newPostButton.on("click", function(event) {
+		console.log("you clicked new post!")
+
+		console.log($postName);
+		$postName.prop('required',true);
+		$postBody.prop('required',true);
+	});
+
+	// on modal SHOW
+	$newPostModal.on('shown.bs.modal', function () {
+	  $postName.focus();
+	})
+
+	// on modal HIDE
+	$newPostModal.on('hidden.bs.modal', function(){
+	    $(this).find('form')[0].reset();
+	});
 
 	// On CLICK not SUBMIT - ask why this isn't working as a submit listener
 	$publishPost.on("click", function(event) {
@@ -93,6 +121,13 @@ $(function() {
 		// Update post count
 		$postCount.html(Post.all.length + " posts")
 
+	});
+
+	// Comment Submit
+	$commentSubmit.on("click", function(event) {
+		event.preventDefault();
+
+		console.log("form submitted");
 	});
 
 });
