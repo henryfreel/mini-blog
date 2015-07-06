@@ -1,5 +1,8 @@
 $(function() {
 
+	// Tooltips
+	  $('[data-toggle="tooltip"]').tooltip()
+
 	// Template
 	var postTemplate = _.template($("#post-template").html())
 
