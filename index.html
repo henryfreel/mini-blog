@@ -104,10 +104,22 @@
     <script type="text/template" id="post-template">
       <div class="row post col-lg-8 col-md-offset-2">
         <div class="panel panel-default">
+          <div class="panel-heading">
+              <h3 class="panel-title"><%= name %></h3>
+            </div>
           <div class="panel-body">
             <p><%= body %></p>
           </div>
-          <div class="panel-footer"><%= name %></div>
+
+          <div class="panel-footer">
+            <h5>Comments<h5>
+            <input class="btn btn-default add-comment" type="button" value="Add Comment">
+          </div>
+
+          <ul class="list-group">
+              <li class="list-group-item">Here is a comment</li>
+          </ul>
+
         </div>
       </div>
     </script>

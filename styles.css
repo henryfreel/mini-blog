@@ -27,3 +27,20 @@ textarea {
 	resize: none;
 }
 
+.add-comment {
+	float: right;
+	position: relative;
+	top: -8px;
+	/*margin-top: -30px;*/
+}
+
+.panel-footer {
+	padding-bottom: 25px;
+}
+
+.panel-footer > h5 {
+	display: inline;
+	position: relative;
+	/*margin-top: 20px;*/
+	top: 8px;
+}
