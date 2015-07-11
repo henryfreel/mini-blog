@@ -35,6 +35,7 @@ $(function() {
 	var Post = function(name, body) {
 		this.name = name;
 		this.body = body;
+		this.date;
 		this.comments = [];
 	}
 
@@ -61,21 +62,20 @@ $(function() {
 		this.date;
 	}
 
-	Comment.prototype.render = function() {
-		
-	}
-
 	// Test Posts
 	var post1 = new Post("henry", "1: Do you like green eggs and ham? I do not like them");
 	post1.comments = [{body: "This a really nice post", date: "there is no date yet"}];
+	post1.date = "0/0/00"
 	post1.savePost();
 
 	var post2 = new Post("Samuel", "2: here is some sample text for another post");
 	post2.comments = [{body: "This a really nice post", date: "there is no date yet"}];
+	post2.date = "0/0/00"
 	post2.savePost();
 
 	var post3 = new Post("Izzy", "3: here is some sample text for yet another post")
 	post3.comments = [{body: "This a really nice post", date: "there is no date yet"}];
+	post3.date = "0/0/00"
 	post3.savePost();
 
 	// Render Array on page
@@ -105,6 +105,10 @@ $(function() {
 		var postName = $postName.val();
 		var postBody = $postBody.val();
 		var postData = new Post(postName, postBody);
+
+		// add date
+		var date = new Date();
+		postData.date = date.toLocaleString();
 
 		if (postName != "" && postBody != "") {
 			$newPostModal.modal('hide')
