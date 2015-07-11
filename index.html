@@ -120,7 +120,7 @@
 
           <ul class="list-group comments-container">
               <% comments.forEach(function(item){ %>
-                <li class="list-group-item"><%= item %></li>
+                <li class="list-group-item"><%= item.body %> - <%= item.date %></li>
               <% }) %>
           </ul>
 

@@ -38,11 +38,6 @@ $(function() {
 		this.comments = [];
 	}
 
-	var Comment = function() {
-		this.body = "has no body yet";
-		this.date;
-	}
-
 	// Posts array - ask about why this has to be outside of the constructor and why not just use a reqular array
 	Post.all = [];
 
@@ -61,17 +56,26 @@ $(function() {
 		$post.attr("data-index", index);
 	};
 
+	var Comment = function(body) {
+		this.body = "has no body yet";
+		this.date;
+	}
+
+	Comment.prototype.render = function() {
+		
+	}
+
 	// Test Posts
-	var post1 = new Post("henry", "1: Do you like green eggs and ham? I do not like them, Sam-I-am. I do not like green eggs and ham! Would you like them here or there? I would not like them here or there. I would not like them anywhere. I do so like green eggs and ham! Thank you! Thank you, Sam-I-am");
-	post1.comments = ["This a really nice post", "Thanks so much for the advice"];
+	var post1 = new Post("henry", "1: Do you like green eggs and ham? I do not like them");
+	post1.comments = [{body: "This a really nice post", date: "there is no date yet"}];
 	post1.savePost();
 
 	var post2 = new Post("Samuel", "2: here is some sample text for another post");
-	post2.comments = ["This a really nice post", "Thanks so much for the advice"];
+	post2.comments = [{body: "This a really nice post", date: "there is no date yet"}];
 	post2.savePost();
 
 	var post3 = new Post("Izzy", "3: here is some sample text for yet another post")
-	post3.comments = ["This a really nice post", "Thanks so much for the advice"];
+	post3.comments = [{body: "This a really nice post", date: "there is no date yet"}];
 	post3.savePost();
 
 	// Render Array on page
@@ -134,10 +138,14 @@ $(function() {
 		// grab value from input
 		var comment = $commentInput.val();
 
+		// generate new Comment instance
 		var newComment = new Comment();
 		newComment.body = comment;
-		newComment.date = "no date yet";
 		console.log(newComment)
+
+		// add date
+		var date = new Date();
+		newComment.date = date.toLocaleString();
 
 		// reset input
 		$commentInput.val("");
@@ -150,9 +158,8 @@ $(function() {
 
 		// append to <ul>
 		// $comments.append("<li class='list-group-item'>" + comment + "</li>");
+		// append using the template
 		$comments.append(commentTemplate(newComment));
-
-
 
 	});
 
