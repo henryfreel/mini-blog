@@ -3,8 +3,11 @@ $(function() {
 	// Tooltips
 	$('[data-toggle="tooltip"]').tooltip()
 
-	// Template
+	// Post Template
 	var postTemplate = _.template($("#post-template").html())
+
+	// Comment Template
+	var commentTemplate = _.template($("#comment-template").html())
 
 	// Post Variables
 	var $newPostForm = $("#new-post-form");
@@ -35,6 +38,11 @@ $(function() {
 		this.comments = [];
 	}
 
+	var Comment = function() {
+		this.body = "has no body yet";
+		this.date;
+	}
+
 	// Posts array - ask about why this has to be outside of the constructor and why not just use a reqular array
 	Post.all = [];
 
@@ -54,13 +62,16 @@ $(function() {
 	};
 
 	// Test Posts
-	var post1 = new Post("henry", "1: Do you like green eggs and ham? I do not like them, Sam-I-am. I do not like green eggs and ham! Would you like them here or there? I would not like them here or there. I would not like them anywhere. I do so like green eggs and ham! Thank you! Thank you, Sam-I-am")
+	var post1 = new Post("henry", "1: Do you like green eggs and ham? I do not like them, Sam-I-am. I do not like green eggs and ham! Would you like them here or there? I would not like them here or there. I would not like them anywhere. I do so like green eggs and ham! Thank you! Thank you, Sam-I-am");
+	post1.comments = ["This a really nice post", "Thanks so much for the advice"];
 	post1.savePost();
 
-	var post2 = new Post("Samuel", "2: here is some sample text for another post")
+	var post2 = new Post("Samuel", "2: here is some sample text for another post");
+	post2.comments = ["This a really nice post", "Thanks so much for the advice"];
 	post2.savePost();
 
 	var post3 = new Post("Izzy", "3: here is some sample text for yet another post")
+	post3.comments = ["This a really nice post", "Thanks so much for the advice"];
 	post3.savePost();
 
 	// Render Array on page
@@ -83,7 +94,7 @@ $(function() {
 	});
 
 	// On CLICK not SUBMIT - ask why this isn't working as a submit listener
-	$publishPost.on("click", function(event) {
+	$newPostForm.on("submit", function(event) {
 		event.preventDefault();
 
 		// Temporary variables
@@ -114,17 +125,34 @@ $(function() {
 	});
 
 	// Comment Submit
-	$postsContainer.on("submit", $commentSubmit, function(event) {
+	$postsContainer.on("submit", ".comment-form", function(event) {
 		event.preventDefault();
 
-		// var comment = $commentInput.val();
+		// find input
+		var $commentInput = $(this).find(".comment-input");
 
-		var $commentsConatiner = $(this).children(".comments-container");
-		console.log($commentsConatiner);
+		// grab value from input
+		var comment = $commentInput.val();
 
-		var $comment = $(this).children(".comment-input");
+		var newComment = new Comment();
+		newComment.body = comment;
+		newComment.date = "no date yet";
+		console.log(newComment)
 
-		console.log($comment);
+		// reset input
+		$commentInput.val("");
+
+		// find parent of form, the post
+		var $post = $(this).parent()[0];
+
+		//find <ul> (child) of post
+		var $comments = $("> .comments-container", $post);
+
+		// append to <ul>
+		// $comments.append("<li class='list-group-item'>" + comment + "</li>");
+		$comments.append(commentTemplate(newComment));
+
+
 
 	});
 

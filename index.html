@@ -104,20 +104,24 @@
     <script type="text/template" id="post-template">
       <div class="row post col-lg-8 col-md-offset-2">
         <div class="panel panel-default">
+
           <div class="panel-heading">
               <h3 class="panel-title"><%= name %></h3>
-            </div>
+          </div>
+
           <div class="panel-body">
             <p><%= body %></p>
           </div>
 
           <div class="panel-footer">
             <h5>Comments<h5>
-            <input class="btn btn-default add-comment" type="button" value="Add Comment">
+            <!-- <input class="btn btn-default add-comment" type="button" value="Add Comment"> -->
           </div>
 
           <ul class="list-group comments-container">
-              <li class="list-group-item"><%= comments %></li>
+              <% comments.forEach(function(item){ %>
+                <li class="list-group-item"><%= item %></li>
+              <% }) %>
           </ul>
 
           <form class="form-inline comment-form">
@@ -131,6 +135,10 @@
 
         </div>
       </div>
+    </script>
+
+    <script type="text/template" id="comment-template">
+      <li class="list-group-item"><%= body %> - <%= date %></li>
     </script>
 
     <!-- SCRIPTS -->
