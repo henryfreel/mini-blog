@@ -1,0 +1,24 @@
+{
+  "name": "project-0",
+  "version": "1.0.0",
+  "description": "## How do I use it?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henryfreel/mini-blog.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/henryfreel/mini-blog/issues"
+  },
+  "homepage": "https://github.com/henryfreel/mini-blog#readme",
+  "dependencies": {
+    "body-parser": "^1.13.2",
+    "express": "^4.13.1",
+    "underscore": "^1.8.3"
+  }
+}
