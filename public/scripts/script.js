@@ -49,6 +49,21 @@ $(function() {
 		this.comments = [{comment_body: "no comment yet", comment_date: "no date yet"}];
 	}
 
+	$postBody.keypress(function (e) {
+        if(e.which == 13 && event.ctrlKey) {
+            e.preventDefault();
+            $(this).submit();
+        }
+    });
+
+	$editPostBody.keypress(function (e) {
+        if(e.which == 13 && event.ctrlKey) {
+            e.preventDefault();
+            $(this).submit();
+        }
+    });
+
+
 	// Posts array - ask about why this has to be outside of the constructor and why not just use a reqular array
 	// Post.all = [];
 	// var posts = [];
@@ -146,7 +161,9 @@ $(function() {
 			// console.log(numPosts);
 
 			// Update post count
-			if (numPosts > 1) {
+			if (numPosts === 0) {
+				$postCount.html(numPosts + " posts");
+			} else if (numPosts > 1) {
 				$postCount.html(numPosts + " posts");
 			} else {
 				$postCount.html(numPosts + " post");
@@ -158,7 +175,8 @@ $(function() {
 
 	// on new post modal SHOW
 	$newPostModal.on('shown.bs.modal', function () {
-	  $postName.focus();
+		$("#body-help").show();	
+		$postName.focus();
 	})
 
 	// on new post modal HIDE
@@ -187,12 +205,30 @@ $(function() {
 		if (postName === "") {
 
 			$("#post-name-group").addClass("has-error");
+			$('#name-error.collapse').collapse("show");
+
+			$('#body-error.collapse').collapse("hide");
+
+			$postName.focus();
 
 		} else if (postBody === "") {
 
+			$("#post-name-group").removeClass("has-error");
+
 			$("#post-body-group").addClass("has-error");
+			$('#body-error.collapse').collapse("show")
+
+			$('#name-error.collapse').collapse("hide");
+			$("#body-help").hide();
+
+			$postBody.focus();
 
 		} else {
+			$('#name-error.collapse').collapse("hide");
+			$('#body-error.collapse').collapse("hide");
+			$("#post-name-group").removeClass("has-error");
+			$("#post-body-group").removeClass("has-error");
+
 			$newPostModal.modal("hide");
 
 			// render on client side
