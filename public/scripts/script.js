@@ -9,7 +9,7 @@ $(function() {
 	// Comment Template
 	var commentTemplate = _.template($("#comment-template").html())
 
-	// Post Variables
+	// New Post Variables
 	var $newPostForm = $("#new-post-form");
 	var $newPostModal = $("#add-post-modal");
 
@@ -26,7 +26,7 @@ $(function() {
 	var $editPostName = $("#edit-post-name");
 	var $editPostBody = $("#edit-post-body");
 
-	var editPostId;
+	var postId;
 
 	// Comment Variables
 	var $commentInput = $(".comment-input");
@@ -133,15 +133,25 @@ $(function() {
 				var $post = $(postTemplate(post));
 				$postsContainer.prepend($post);
 
-				// posts.unshift($post);
-				// user.render();
+				_.each(post.comments, function(comment) {
+
+					var $comments = $("#post-" + post.id + " > .comments-container", $postsContainer);
+					$comments.append(commentTemplate(comment));
+
+				})
+
 			})
 
-			console.log("--> number of posts")
-			console.log(numPosts);
+			// console.log("--> number of posts")
+			// console.log(numPosts);
 
 			// Update post count
-			$postCount.html(numPosts + " posts");
+			if (numPosts > 1) {
+				$postCount.html(numPosts + " posts");
+			} else {
+				$postCount.html(numPosts + " post");
+			}
+			
 
 		}
 	});
@@ -156,7 +166,7 @@ $(function() {
 	    $(this).find('form')[0].reset();
 	});
 
-	// On SUBMIT of Post form
+	// On SUBMIT of New Post form
 	$newPostForm.on("submit", function(event) {
 		event.preventDefault();
 
@@ -174,7 +184,15 @@ $(function() {
 		// add comments
 		postData.comments = [{comment_body: "no comment yet", comment_date: "no date yet"}];
 
-		if (postName != "" && postBody != "") {
+		if (postName === "") {
+
+			$("#post-name-group").addClass("has-error");
+
+		} else if (postBody === "") {
+
+			$("#post-body-group").addClass("has-error");
+
+		} else {
 			$newPostModal.modal("hide");
 
 			// render on client side
@@ -196,25 +214,21 @@ $(function() {
 				url: "http://localhost:3000/api/posts",
 				data: postData,
 				success: function(data) {
-
 					// add temp ID
 					// postData.id = data.id;
-					
 				},
 				error: function() {
 					alert("Error!");
 				}
 			});
 
-		} else {
+			if (numPosts > 1) {
+				$postCount.html((numPosts + 1) + " posts");
+			} else {
+				$postCount.html((numPosts + 1) + " post");
+			}
 
-			$("#post-name-group").addClass("has-error");
-			$("#post-body-group").addClass("has-error");
-
-			$postBody.placeholder = "here is some shit";
-
-			console.log("you gotta type something")
-		}
+		} 
 
 	});
 
@@ -235,7 +249,7 @@ $(function() {
 				$editPostBody.val(data.body);
 
 				console.log(data.id)
-				editPostId = data.id
+				postId = data.id
 			},
 				error: function() {
 					alert("Error!");
@@ -248,9 +262,51 @@ $(function() {
 	$editPostForm.on("submit", function(event) {
 		event.preventDefault();
 
+		// hide the modal
 		$editPostModal.modal("hide");
 
-		
+
+		// find the post
+		var $editNewPanel = ($("#post-" + postId)[0]);
+		console.log("--> this is the panel you are trying to edit");
+		console.log($editNewPanel);
+
+		// find the name
+		var $editNewPanelDate = ($("> .panel-heading > .panel-title > .post-date", $editNewPanel));
+		// $editNewPanelName.removeClass();
+		console.log("--> this is the title you are trying to replace");
+		console.log($editNewPanelDate);
+
+		// find the body
+		var $editNewPanelBody = ($("> .panel-body > p", $editNewPanel));
+		console.log("--> this is the body you are trying to replace");
+		console.log($editNewPanelBody);
+
+		// new date
+		var newDate = new Date();
+		newDate = newDate.toLocaleString();
+
+		// Render new date/body on page
+		$editNewPanelDate.text("edited on " + newDate);
+		$editNewPanelBody.text($editPostBody.val());
+
+		var editPostObj = {
+			date: newDate,
+			body: $editPostBody.val()
+		};
+
+		$.ajax({
+			url: "http://localhost:3000/api/posts/" + postId,
+			type: "PUT",
+			data: editPostObj,
+			success: function(data) {
+				console.log("editted post!")
+			},
+				error: function() {
+					alert("Error!");
+			}
+		});
+
 
 	});
 
@@ -267,11 +323,12 @@ $(function() {
 		// generate new Comment instance
 		var newComment = {comment_body: comment};
 		// newComment.body = comment;
-		console.log(newComment)
+		// console.log(newComment)
 
 		// add date
 		var date = new Date();
-		newComment.comment_date = date.toLocaleString();
+		date = date.toLocaleString();
+		newComment.comment_date = date;
 
 		// reset input
 		$commentInput.val("");
@@ -286,6 +343,26 @@ $(function() {
 		// $comments.append("<li class='list-group-item'>" + comment + "</li>");
 		// append using the template
 		$comments.append(commentTemplate(newComment));
+
+		var postData = {};
+		postData.comments = [{comment_body: comment, comment_date: date}];
+
+		var newCommentObj = {
+			comment_body: comment,
+			comment_date: date
+		};
+
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:3000/api/posts/"+ $(this).closest(".panel").data("id") + "/comments",
+			data: newCommentObj,
+			success: function(data) {
+				console.log("you added a comment!")
+			},
+			error: function() {
+				alert("Error! Couldn't POST a comment");
+			}
+		});
 
 	});
 

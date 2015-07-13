@@ -98,7 +98,7 @@
               <div class="modal-body">
 
                   <div class="form-group" id="edit-post-name-group">
-                    <input class="form-control" id="edit-post-name" placeholder="What's your name?">
+                    <input class="form-control disabled" id="edit-post-name" placeholder="What's your name?" disabled>
                   </div>
 
                   <div class="form-group" id="edit-post-body-group">
@@ -141,10 +141,10 @@
     <!-- Post Template -->
     <script type="text/template" id="post-template">
       <div class="row post col-lg-8 col-md-offset-2">
-        <div class="panel panel-default" id="phrase-<%= id %>" data-id="<%= id %>">
+        <div class="panel panel-default" id="post-<%= id %>" data-id="<%= id %>">
 
           <div class="panel-heading">
-              <h3 class="panel-title"><%= name %> - <%= date %></h3>
+              <h3 class="panel-title"><%= name %><span class="post-date"><%= date %></span></h3>
           </div>
 
           <div class="panel-body">
@@ -154,12 +154,11 @@
 
           <div class="panel-footer">
             <h5>Comments<h5>
-            <!-- <input class="btn btn-default add-comment" type="button" value="Add Comment"> -->
           </div>
 
           <ul class="list-group comments-container">
               <% comments.forEach(function(item){ %>
-                <li class="list-group-item"><%= item.comment_body %> - <%= item.comment_date %></li>
+                <!-- <li class="list-group-item"><%= item.comment_body %><span class="comment-date"><%= item.comment_date %></span</li> -->
               <% }) %>
           </ul>
 
@@ -177,7 +176,7 @@
     </script>
 
     <script type="text/template" id="comment-template">
-      <li class="list-group-item"><%= comment_body %> - <%= comment_date %></li>
+      <li class="list-group-item"><%= comment_body %><span class="comment-date"><%= comment_date %></span></li>
     </script>
 
     <!-- SCRIPTS -->

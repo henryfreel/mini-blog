@@ -1,3 +1,6 @@
+body {
+	background-color: #F0F4F7;
+}
 
 .navbar {
   border-radius: 0px;
@@ -43,4 +46,16 @@ textarea {
 	margin: 10px;
 	width: 574px;
 	margin-right: 5px;
+}
+
+.post-date {
+	float: right;
+	color: #ccc;
+	font-weight: 300;
+}
+
+.comment-date {
+	float: right;
+	color: #ccc;
+	font-weight: 300;
 }

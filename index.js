@@ -20,22 +20,7 @@ app.all('/*', function(req, res, next) {
   next();
 });
 
-var posts = [
-  {
-    date: "00/00/00",
-    name: "Bob - API",
-    body: "here is my api body",
-    comments: [{comment_body: "API comment", comment_date: "0/0/00"}],
-    id: 1
-  },
-  {
-    date: "00/00/00",
-    name: "Julie - API",
-    body: "here is my api body",
-    comments: [{comment_body: "API comment", comment_date: "0/0/00"}],
-    id: 2
-  }
-];
+var posts = [];
 
 // set up route for /users JSON
 app.get("/api/posts", function(req, res) {
@@ -55,23 +40,66 @@ app.get("/api/posts/:id", function(req, res) {
 
 });
 
-// create new phrase
+
+// create new post
 app.post('/api/posts', function (req, res) {
   // grab params (word and definition) from form data
   var newPost = req.body;
 
   // set sequential id (last id in `phrases` array + 1)
-  if (posts.length > 0) {
+  if (posts.length > 1) {
     newPost.id = posts[posts.length - 1].id +  1;
   } else {
-    newPost.id = 0;
+    newPost.id = 1;
   }
 
-  // add newPhrase to `phrases` array
+  newPost.comments = [];
+
+  // add newPost to `phrases` array
   posts.push(newPost);
   
-  // send newPhrase as JSON response
+  // send newPost as JSON response
   res.json(newPost);
+});
+
+
+// create new comment
+app.post('/api/posts/:id/comments', function (req, res) {
+
+  // set the value of the id
+  var targetId = parseInt(req.params.id);
+
+  // find item in `phrases` array matching the id
+  var foundPost = _.findWhere(posts, {id: targetId});
+
+  // grab params from form data
+  var newComment = req.body;
+
+  // add newPhrase to `phrases` array
+  foundPost.comments.push(newComment);
+  
+  // send newPhrase as JSON response
+  res.json(newComment);
+});
+
+// edit post
+app.put('/api/posts/:id', function (req, res) {
+
+  // set the value of the id
+  var targetId = parseInt(req.params.id);
+
+  // find item in `phrases` array matching the id
+  var foundPost = _.findWhere(posts, {id: targetId});
+
+  // update the phrase's word
+  foundPost.body = req.body.body;
+
+  // update the phrase's definition
+  foundPost.date = req.body.date;
+
+  // send back edited object
+  res.json(foundPost);
+
 });
 
 
