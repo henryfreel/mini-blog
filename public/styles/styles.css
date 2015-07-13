@@ -42,9 +42,9 @@ textarea {
 	top: 8px;
 }
 
-.comment-input {
+.form-control.comment-input {
 	margin: 10px;
-	width: 574px;
+	width: 580px;
 	margin-right: 5px;
 }
 
@@ -59,3 +59,15 @@ textarea {
 	color: #ccc;
 	font-weight: 300;
 }
+
+.edit-post {
+	cursor: pointer;
+}
+
+.edit-post .no-underline:hover {
+	text-decoration: none;
+}
+
+
+
+
