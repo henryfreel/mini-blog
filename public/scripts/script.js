@@ -26,6 +26,8 @@ $(function() {
 	var $editPostName = $("#edit-post-name");
 	var $editPostBody = $("#edit-post-body");
 
+	var $deletePost = $("#delete-post");
+
 	var postId;
 
 	// Comment Variables
@@ -42,7 +44,7 @@ $(function() {
 
 	// Contrsuctor
 	var Post = function(name, body) {
-		this.id;
+		// this.id;
 		this.name = name;
 		this.body = body;
 		this.date = "no date yet";
@@ -150,7 +152,7 @@ $(function() {
 
 				_.each(post.comments, function(comment) {
 
-					var $comments = $("#post-" + post.id + " > .comments-container", $postsContainer);
+					var $comments = $("#post-" + post._id + " > .comments-container", $postsContainer);
 					$comments.append(commentTemplate(comment));
 
 				})
@@ -239,19 +241,20 @@ $(function() {
 			// posts.unshift($post);
 
 			// // add temp ID
-			postData.id = numPosts + 1;
-
-			// render on client side
-			var $post = $(postTemplate(postData));
-			$postsContainer.prepend($post);
+			// postData._id = numPosts + 1;
 
 			$.ajax({
 				type: "POST",
 				url: "http://localhost:3000/api/posts",
 				data: postData,
 				success: function(data) {
-					// add temp ID
-					// postData.id = data.id;
+
+					postData._id = data._id;
+
+					// render on client side
+					var $post = $(postTemplate(postData));
+					$postsContainer.prepend($post);
+
 				},
 				error: function() {
 					alert("Error!");
@@ -273,6 +276,7 @@ $(function() {
 		event.preventDefault();
 
 		console.log("--> you are going to edit this post!")
+		console.log($(this).closest(".panel").data("id"));
 
 		console.log("--> you clicked")
 		console.log(this);
@@ -284,8 +288,8 @@ $(function() {
 				$editPostName.val(data.name);
 				$editPostBody.val(data.body);
 
-				console.log(data.id)
-				postId = data.id
+				console.log(data._id)
+				postId = data._id
 			},
 				error: function() {
 					alert("Error!");
@@ -327,6 +331,7 @@ $(function() {
 		$editNewPanelBody.text($editPostBody.val());
 
 		var editPostObj = {
+			name: $editPostName.val(),
 			date: newDate,
 			body: $editPostBody.val()
 		};
@@ -343,6 +348,32 @@ $(function() {
 			}
 		});
 
+
+	});
+
+	$deletePost.on("click", function(event) {
+
+		// hide the modal
+		$editPostModal.modal("hide");
+
+		console.log("--> Trying to Delete");
+		console.log(postId);
+
+		$.ajax({
+			url: "http://localhost:3000/api/posts/" + postId,
+			type: "DELETE",
+			success: function(data) {
+				console.log("deleted a post")
+
+				// remove deleted phrase from view
+		        $('#post-' + postId).remove();
+			},
+				error: function() {
+					alert("Error!");
+			}
+		});
+
+		
 
 	});
 
@@ -380,8 +411,8 @@ $(function() {
 		// append using the template
 		$comments.append(commentTemplate(newComment));
 
-		var postData = {};
-		postData.comments = [{comment_body: comment, comment_date: date}];
+		// var postData = {};
+		// postData.comments = [{comment_body: comment, comment_date: date}];
 
 		var newCommentObj = {
 			comment_body: comment,
