@@ -184,6 +184,11 @@ $(function() {
 	// on new post modal HIDE
 	$newPostModal.on('hidden.bs.modal', function(){
 	    $(this).find('form')[0].reset();
+
+	    $('#name-error.collapse').collapse("hide");
+	    $('#body-error.collapse').collapse("hide");
+	    $("#post-name-group").removeClass("has-error");
+	    $("#post-body-group").removeClass("has-error");
 	});
 
 	// On SUBMIT of New Post form
