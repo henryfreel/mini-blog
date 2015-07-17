@@ -8,7 +8,7 @@ var express = require("express"),
 // Connect to Database
 mongoose.connect('mongodb://localhost/mini-blog');
 
-var Post = require('./models/post');
+var db = require('./models/model');
 
 // tell app to use bodyParser middleware
 app.use(bodyParser.urlencoded({extended: true}));
@@ -27,17 +27,10 @@ app.all('/*', function(req, res, next) {
 
 // MONGODB Load Posts
 app.get('/api/posts', function (req, res) {
-  Post.find(function (err, posts) {
-    res.json(posts);
+  db.Post.find(function (err, foundPosts) {
+    res.json(foundPosts);
   });
 });
-
-// var posts = [];
-
-// set up route for /users JSON
-// app.get("/api/posts", function(req, res) {
-//   res.json(posts);
-// });
 
 // MONGODB Set up route for /users/id 
 app.get("/api/posts/:id", function(req, res) {
@@ -45,7 +38,7 @@ app.get("/api/posts/:id", function(req, res) {
   // set the value of the id
   var targetId = req.params.id;
 
-  Post.findOne({_id: targetId}, function (err, foundPost) {
+  db.Post.findOne({_id: targetId}, function (err, foundPost) {
 
     res.json(foundPost);
 
@@ -53,22 +46,16 @@ app.get("/api/posts/:id", function(req, res) {
 
 });
 
-// // set up route for /users/id JSON
-// app.get("/api/posts/:id", function(req, res) {
-
-//   // set the value of the id
-//   var targetId = parseInt(req.params.id);
-
-//   // find item in `phrases` array matching the id
-//   var foundPost = _.findWhere(posts, {id: targetId});
-
-//   res.json(foundPost);
-
-// });
-
 // MONGODB New Post
 app.post('/api/posts', function (req, res) {
-  var newPost = new Post({
+
+  // create the author (we'll assume it doesn't exist yet)
+  var newAuthor = new db.Author({
+    name: req.body.author
+  });
+  newAuthor.save();
+
+  var newPost = new db.Post({
     name: req.body.name,
     body: req.body.body,
     date: req.body.date,
@@ -79,37 +66,19 @@ app.post('/api/posts', function (req, res) {
   });
 });
 
-// create new post
-// app.post('/api/posts', function (req, res) {
-//   // grab params (word and definition) from form data
-//   var newPost = req.body;
-
-//   // set sequential id (last id in `phrases` array + 1)
-//   if (posts.length > 1) {
-//     newPost.id = posts[posts.length - 1].id +  1;
-//   } else {
-//     newPost.id = 1;
-//   }
-
-//   newPost.comments = [];
-
-//   // add newPost to `phrases` array
-//   posts.push(newPost);
-  
-//   // send newPost as JSON response
-//   res.json(newPost);
-// });
-
 // MONGODB New Comment
 app.post('/api/posts/:id/comments', function (req, res) {
 
   // set the value of the id
   var targetId = req.params.id
 
-  Post.findOne({_id: targetId}, function (err, foundPost) {
+  db.Post.findOne({_id: targetId}, function (err, foundPost) {
 
     // grab params from form data
-    var newComment = req.body;
+    var newComment = new db.Comment({
+      body: req.body.body,
+      date: req.body.date
+    });
 
     // add newPhrase to `phrases` array
     foundPost.comments.push(newComment);
@@ -123,29 +92,10 @@ app.post('/api/posts/:id/comments', function (req, res) {
 
 });
 
-// create new comment
-// app.post('/api/posts/:id/comments', function (req, res) {
-
-//   // set the value of the id
-//   var targetId = parseInt(req.params.id);
-
-//   // find item in `phrases` array matching the id
-//   var foundPost = _.findWhere(posts, {id: targetId});
-
-//   // grab params from form data
-//   var newComment = req.body;
-
-//   // add newPhrase to `phrases` array
-//   foundPost.comments.push(newComment);
-  
-//   // send newPhrase as JSON response
-//   res.json(newComment);
-// });
-
 // MONGODB Edit Post
 app.put('/api/posts/:id', function (req, res) {
   var targetId = req.params.id;
-  Post.findOne({_id: targetId}, function (err, foundPost) {
+  db.Post.findOne({_id: targetId}, function (err, foundPost) {
     foundPost.name = req.body.name;
     foundPost.body = req.body.body;
     foundPost.date = req.body.date;
@@ -157,33 +107,13 @@ app.put('/api/posts/:id', function (req, res) {
   });
 });
 
-// edit post
-// app.put('/api/posts/:id', function (req, res) {
-
-//   // set the value of the id
-//   var targetId = parseInt(req.params.id);
-
-//   // find item in `phrases` array matching the id
-//   var foundPost = _.findWhere(posts, {id: targetId});
-
-//   // update the phrase's word
-//   foundPost.body = req.body.body;
-
-//   // update the phrase's definition
-//   foundPost.date = req.body.date;
-
-//   // send back edited object
-//   res.json(foundPost);
-
-// });
-
 // MONGODB
 app.delete("/api/posts/:id", function (req, res) {
 
   var targetId = req.params.id;
 
   // find phrase in db by id and remove
-  Post.findOneAndRemove({_id: targetId}, function (err, deletedPost) {
+  db.Post.findOneAndRemove({_id: targetId}, function (err, deletedPost) {
     res.json(deletedPost);
   });
 

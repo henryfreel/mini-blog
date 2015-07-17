@@ -153,7 +153,6 @@
 
           <div class="panel-body">
             <p><%= body %></p>
-            <!-- <button type="button" class="btn btn-default edit-post" data-toggle="modal" data-target="#edit-post-modal">Edit Post</button> -->
             <a class="edit-pencil edit-post" data-toggle="modal" data-target="#edit-post-modal">
               <span class="glyphicon glyphicon-pencil edit"></span><span class="no-underline">&nbsp;&nbsp;</span>Edit Post
             </a>
@@ -164,9 +163,7 @@
           </div>
 
           <ul class="list-group comments-container">
-              <% comments.forEach(function(item){ %>
-                <!-- <li class="list-group-item"><%= item.comment_body %><span class="comment-date"><%= item.comment_date %></span</li> -->
-              <% }) %>
+              <!-- Comments go here -->
           </ul>
 
           <form class="form-inline comment-form">
@@ -183,7 +180,7 @@
     </script>
 
     <script type="text/template" id="comment-template">
-      <li class="list-group-item"><%= comment_body %><span class="comment-date"><%= comment_date %></span></li>
+      <li class="list-group-item"><%= body %><span class="comment-date"><%= date %></span></li>
     </script>
 
     <!-- SCRIPTS -->
@@ -203,3 +200,7 @@
     <![endif]-->
   </body>
 </html>
+
+              <!-- <% comments.forEach(function(item){ %> -->
+                <!-- <li class="list-group-item"><%= item.comment_body %><span class="comment-date"><%= item.comment_date %></span</li> -->
+              <!-- <% }) %> -->
